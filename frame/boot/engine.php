@@ -12,7 +12,8 @@ class Engine {
         session_start();
     }
     private static function viewMain() {
-        $main = new \Work\Controllers\Main;
-        echo $main->render();
+        /*$main = new \Work\Controllers\Main;
+        echo $main->render();*/
+        echo \Work\Controllers\Main::start();
     }
 }

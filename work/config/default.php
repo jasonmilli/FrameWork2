@@ -1,4 +1,4 @@
 <?php return array(
-    'settings' => array('root' => '', 'root_address' => 'fw'),
+    'settings' => array('root' => '', 'root_address' => 'framework'),
     'database' => array('default' => array('driver' => 'mysql', 'host' => 'localhost', 'username' => 'root', 'password' => '', 'schema' => 'frame'))
 );
