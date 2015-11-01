@@ -3,13 +3,14 @@ class Builder {
     private $connection;
     private $db;
     public $table;
-    private $primary_key;
+    public $primary_key;
     public $wheres = array();
     public $selects = array();
     public $limit;
     public $sql;
     public $bindings = array();
     private $stmt;
+    public $updates = array();
     public function __construct($connection, $db, $table, $primary_key) {
         $this->connection = $connection;
         $this->db = $db;
@@ -22,22 +23,26 @@ class Builder {
     }
     public function first() {
         $this->limit = 1;
-        $this->prepare();
+        $this->prepare('read');
         $result = $this->stmt->fetch();
-        if ($result) return new \Frame\Item($result);
+        if ($result) return new \Frame\Item($result, $this);
         else return null;
     }
     public function pluck($column) {
         $this->selects = array($column);
-        $this->prepare();
+        $this->prepare('read');
         $result = $this->stmt->fetch();
         if ($result) return arrayGet($result, $column);
         else return null;
     }
-    private function prepare() {
+    private function prepare($type) {
         $class = "\\Frame\\Builders\\{$this->db['driver']}";
-        $class::build($this);
+        $class::$type($this);
         $this->stmt = $this->connection->prepare($this->sql);
         $this->stmt->execute($this->bindings);
+    }
+    public function save($item) {
+        $this->updates = $item;
+        $this->prepare('update');
     }
 }

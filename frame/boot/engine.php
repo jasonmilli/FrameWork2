@@ -14,6 +14,7 @@ class Engine {
     private static function viewMain() {
         /*$main = new \Work\Controllers\Main;
         echo $main->render();*/
+        echo \Frame\Key::get();
         echo \Work\Controllers\Main::start();
     }
 }
