@@ -28,19 +28,29 @@ SQL;
         $sets = array();
         $primary_key_value = '';
         $data->bindings = array();
+        //throw new \Exception(print_r($data->updates, true));
         foreach ($data->updates as $column => $value) {
             if ($column == 'updated_at') {
-                $sets[] = `updated_at = NOW()`;
+                $sets[] = '`updated_at` = NOW()';
                 continue;
             }
             $sets[] = "`$column` = ?";
             $data->bindings[] = $value;
-            if ($column = $data->primary_key) $primary_key_value = $value;
+            if ($column == $data->primary_key) $primary_key_value = $value;
         }
-        $data->bindings[] = $primary_key_value;
         $set = implode(", ", $sets);
         $data->sql = <<<SQL
-UPDATE `{$data->table}` SET $set WHERE `{$data->primary_key}` = ?;
+UPDATE `{$data->table}` SET $set;
 SQL;
+        if (count($data->wheres)) {
+            $first = 'WHERE';
+            foreach ($data->wheres as $where) {
+                $data->sql .= <<<SQL
+ $first `{$where['column']}` {$where['operator']} ?
+SQL;
+                $first = 'AND';
+                $data->bindings[] = $where['variable'];
+            }
+        }
     }
 }

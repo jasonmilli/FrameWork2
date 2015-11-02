@@ -24,7 +24,7 @@ class Builder {
     public function first() {
         $this->limit = 1;
         $this->prepare('read');
-        $result = $this->stmt->fetch();
+        $result = $this->stmt->fetch(\PDO::FETCH_ASSOC);
         if ($result) return new \Frame\Item($result, $this);
         else return null;
     }
@@ -38,11 +38,12 @@ class Builder {
     private function prepare($type) {
         $class = "\\Frame\\Builders\\{$this->db['driver']}";
         $class::$type($this);
+        //if ($type == 'update') throw new \Exception(print_r($this->bindings, true));
         $this->stmt = $this->connection->prepare($this->sql);
         $this->stmt->execute($this->bindings);
     }
-    public function save($item) {
-        $this->updates = $item;
+    public function update($updates) {
+        $this->updates = $updates;
         $this->prepare('update');
     }
 }

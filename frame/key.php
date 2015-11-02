@@ -13,13 +13,12 @@ class Key {
     }
     private static function increment($key) {
         $order = \Frame\Config::get('order');
-        if ($key == str_repeat(substr($order, -1), strlen($order))) return str_repeat(substr($order, 0, 1), strlen($order));
+        if ($key == str_repeat(substr($order, -1), strlen($key))) return str_repeat(substr($order, 0, 1), strlen($key));
         for ($i = 1; $i <= strlen($key); $i++) {
             if (substr($key, -$i, 1) != substr($order, -1)) {
                 $key = substr($key, 0, strlen($key) - $i).substr($order, strpos($order, substr($key, -$i, 1)) + 1, 1).str_repeat(substr($order, 0, 1), $i - 1);
-                break;
+                return $key;
             }
-            return $key;
         }
     }
     private static function getLock() {
