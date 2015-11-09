@@ -9,7 +9,6 @@ class Builder {
     public $limit;
     public $sql;
     public $bindings = array();
-    private $stmt;
     public $updates = array();
     public function __construct($connection, $db, $table, $primary_key) {
         $this->connection = $connection;
@@ -23,24 +22,24 @@ class Builder {
     }
     public function first() {
         $this->limit = 1;
-        $this->prepare('read');
-        $result = $this->stmt->fetch(\PDO::FETCH_ASSOC);
+        $stmt = $this->prepare('read');
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($result) return new \Frame\Item($result, $this);
-        else return null;
+        return null;
     }
     public function pluck($column) {
         $this->selects = array($column);
-        $this->prepare('read');
-        $result = $this->stmt->fetch();
+        $stmt = $this->prepare('read');
+        $result = $stmt->fetch();
         if ($result) return arrayGet($result, $column);
         else return null;
     }
     private function prepare($type) {
         $class = "\\Frame\\Builders\\{$this->db['driver']}";
         $class::$type($this);
-        //if ($type == 'update') throw new \Exception(print_r($this->bindings, true));
-        $this->stmt = $this->connection->prepare($this->sql);
-        $this->stmt->execute($this->bindings);
+        $stmt = $this->connection->prepare($this->sql);
+        $stmt->execute($this->bindings);
+        return $stmt;
     }
     public function update($updates) {
         $this->updates = $updates;

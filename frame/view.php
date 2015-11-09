@@ -1,9 +1,11 @@
 <?php namespace Frame;
 class View {
-    public function paragraph($text) {
+    /*public function paragraph($text) {
         return $this->build('p', $text);
-    }
-    private function build($tag, $content) {
-        return "<$tag>$content</$tag>";
+    }*/
+    protected function build($tag, $content, $attributes = array()) {
+        $attribute = '';
+        foreach ($attributes as $key => $value) $attribute .= " $key='$value'";
+        return "<$tag$attribute>$content</$tag>";
     }
 }

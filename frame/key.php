@@ -8,7 +8,6 @@ class Key {
         $current->key = self::increment($current->key);
         $current->save();
         self::releaseLock();
-        return $current->key;
         return self::hash($current->key);
     }
     private static function increment($key) {

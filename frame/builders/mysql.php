@@ -17,7 +17,7 @@ SQL;
                 $data->bindings[] = $where['variable'];
             }
         }
-        if (isset($limit)) {
+        if (isset($data->limit)) {
             $data->sql .= <<<SQL
  LIMIT {$data->limit}
 SQL;

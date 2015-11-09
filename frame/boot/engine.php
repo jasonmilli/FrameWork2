@@ -10,11 +10,15 @@ class Engine {
     }
     private static function session() {
         session_start();
+        if (!isset($_SESSION['frame_key'])) $_SESSION['frame_key'] = \Frame\Key::get();
     }
     private static function viewMain() {
-        /*$main = new \Work\Controllers\Main;
-        echo $main->render();*/
-        echo \Frame\Key::get();
+        if (isset($_GET['key'])) {
+            if ($controller = arrayGet($_SESSION['frame_targets'], $_GET['key'])) {
+                $parts = explode('::', $controller);
+                die($parts[0]::$parts[1]());
+            }
+        }
         echo \Work\Controllers\Main::start();
     }
 }
