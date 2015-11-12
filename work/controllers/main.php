@@ -1,5 +1,5 @@
 <?php namespace Work\Controllers;
-class Main extends \Frame\Controllers {
+class Main extends \Frame\Controller {
     public static function start() {
         $main = new \Frame\Views\Main;
         $header = new \Work\Views\Header;
@@ -14,9 +14,10 @@ class Main extends \Frame\Controllers {
         $p->text('This button is working');
         return $p->render();
     }
-    public static function welcome($args) {
+    public static function welcome($data) {
+        self::validate($data, array('name' => 'required', 'age' => 'required|numeric'));
         $p = new \Frame\Views\Paragraph;
-        $p->text("Welcome {$args['name']}, {$args['age']}");
+        $p->text("Welcome {$data['name']}, {$data['age']}");
         return $p->render();
     }
 }
