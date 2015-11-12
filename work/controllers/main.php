@@ -14,4 +14,9 @@ class Main extends \Frame\Controllers {
         $p->text('This button is working');
         return $p->render();
     }
+    public static function welcome($args) {
+        $p = new \Frame\Views\Paragraph;
+        $p->text("Welcome {$args['name']}, {$args['age']}");
+        return $p->render();
+    }
 }

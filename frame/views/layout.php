@@ -16,7 +16,8 @@ class Layout extends \Frame\View {
                     else $_SESSION['frame_references'] = array($reference => $key);
                     $attributes = array('id' => $key);
                 }
-                $tr .= $this->build('td', $detail->render(), $attributes);
+                if (is_string($detail)) $tr .= $this->build('td', $detail, $attributes);
+                else $tr .= $this->build('td', $detail->render(), $attributes);
             }
             $table .= $this->build('tr', $tr);
         }

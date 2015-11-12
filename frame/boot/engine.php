@@ -13,10 +13,16 @@ class Engine {
         if (!isset($_SESSION['frame_key'])) $_SESSION['frame_key'] = \Frame\Key::get();
     }
     private static function viewMain() {
-        if (isset($_GET['key'])) {
-            if ($controller = arrayGet($_SESSION['frame_targets'], $_GET['key'])) {
+        if (isset($_REQUEST['key'])) {
+            if ($controller = arrayGet($_SESSION['frame_targets'], $_REQUEST['key'])) {
+                $args = array();
+                foreach ($_GET as $key => $value) {
+                    if ($key == 'key') continue;
+                    $args[arrayGet($_SESSION['frame_names'], $key)] = $value;
+                }
                 $parts = explode('::', $controller);
-                die($parts[0]::$parts[1]());
+                if ($args) die($parts[0]::$parts[1]($args));
+                else die($parts[0]::$parts[1]());
             }
         }
         echo \Work\Controllers\Main::start();

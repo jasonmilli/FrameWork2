@@ -3,14 +3,12 @@ class Button extends \Frame\View {
     private $text = '';
     private $target;
     private $action;
-    public function text($text) {
-        $this->text = $text;
-    }
-    public function target($target) {
+    public function __construct($action, $target) {
+        $this->action = $action;
         $this->target = $target;
     }
-    public function action($action) {
-        $this->action = $action;
+    public function text($text) {
+        $this->text = $text;
     }
     public function render() {
         $key = \Frame\Key::get();
