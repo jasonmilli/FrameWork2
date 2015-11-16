@@ -10,6 +10,8 @@ class Builder {
     public $sql;
     public $bindings = array();
     public $updates = array();
+    public $data = array();
+    public $order = array();
     public function __construct($connection, $db, $table, $primary_key) {
         $this->connection = $connection;
         $this->db = $db;
@@ -44,5 +46,13 @@ class Builder {
     public function update($updates) {
         $this->updates = $updates;
         $this->prepare('update');
+    }
+    public function create($data) {
+        $this->data = $data;
+        $this->prepare('create');
+    }
+    public function orderBy($column, $direction = 'asc') {
+        $this->order[$column] = $direction;
+        return $this;
     }
 }

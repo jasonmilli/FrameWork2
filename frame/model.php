@@ -1,19 +1,16 @@
 <?php namespace Frame;
 class Model {
-    protected static $config;
-    protected static $table;
-    protected static $primary_key;
     public static function __callstatic($name, $arguments) {
-        if (!isset(self::$config)) self::$config = 'default';
-        if (!isset(self::$table)) {
+        if (!isset(static::$config)) static::$config = 'default';
+        if (!isset(static::$table)) {
             $parts = explode("\\", strtolower(static::class));
-            self::$table = strtolower($parts[count($parts) - 1]);
+            static::$table = strtolower($parts[count($parts) - 1]);
         }
-        if (!isset(self::$primary_key)) self::$primary_key = self::$table.'_id';
-        $db = Config::get('database.'.self::$config);
-        $db['connection'] = self::$config;
+        if (!isset(static::$primary_key)) static::$primary_key = static::$table.'_id';
+        $db = Config::get('database.'.static::$config);
+        $db['connection'] = static::$config;
         $connection = Connection::get($db);
-        $builder = new Builder($connection, $db, self::$table, self::$primary_key);
+        $builder = new Builder($connection, $db, static::$table, static::$primary_key);
         call_user_func_array(array($builder, $name), $arguments);
         return $builder;
     }

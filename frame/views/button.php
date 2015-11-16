@@ -12,11 +12,14 @@ class Button extends \Frame\View {
     }
     public function render() {
         $key = \Frame\Key::get();
-        $root = \Frame\Config::get('settings.url');
-        $id = arrayGet($_SESSION['frame_references'], $this->target);
-        $attributes= array('type' => 'button', 'id' => $key, 'value' => $this->text);
-        if (isset($_SESSION['frame_targets'])) $_SESSION['frame_targets'][$key] = $this->action;
-        else $_SESSION['frame_targets'] = array($key => $this->action);
+        $user_id = \Work\Models\User::where('session', '=', $_SESSION['frame_key'])->pluck('user_id');
+        $id = \Work\Models\Navigation::where('user_id', '=', $user_id)
+            ->where('type', '=', 'target')
+            ->where('navigation', '=', $this->target)
+            ->orderBy('navigation_id', 'desc')
+            ->pluck('key');
+        $attributes = array('type' => 'button', 'id' => $key, 'value' => $this->text);
+        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'action', 'navigation' => $this->action));
         $button = $this->build('input', '', $attributes);
         $script = $this->build('script', '$("#'.$key.'").unbind("click").bind("click", function() {$("#'.$id.'").load("?key='.$key.'");})');
         return $button.$script;

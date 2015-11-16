@@ -4,6 +4,7 @@ class Main extends \Frame\Controller {
         $main = new \Frame\Views\Main;
         $header = new \Work\Views\Header;
         $middle = new \Work\Views\Middle;
+        //$login = new \Work\Views\Login;
         $footer = new \Work\Views\Footer;
         $layout = new \Frame\Views\Layout(array(array($header),array('middle' => $middle),array($footer)));
         $main->layout($layout);

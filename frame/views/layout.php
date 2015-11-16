@@ -8,12 +8,13 @@ class Layout extends \Frame\View {
         $table = '';
         foreach ($this->rows as $row) {
             $tr = '';
-            foreach ($row as $reference => $detail) {
-                if (is_numeric($reference)) $attributes = array();
+            foreach ($row as $target => $detail) {
+                if (is_numeric($target)) $attributes = array();
                 else {
                     $key = \Frame\Key::get();
-                    if (isset($_SESSION['frame_references'])) $_SESSION['frame_references'][$reference] = $key;
-                    else $_SESSION['frame_references'] = array($reference => $key);
+                    $user_id = \Work\Models\User::where('session', '=', $_SESSION['frame_key'])->pluck('user_id');
+                    if (is_null($user_id)) $user_id = 0;
+                    \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'target', 'navigation' => $target));
                     $attributes = array('id' => $key);
                 }
                 if (is_string($detail)) $tr .= $this->build('td', $detail, $attributes);

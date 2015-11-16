@@ -1,7 +1,7 @@
 <?php namespace Frame\Builders;
 class Mysql implements iBuilder {
     public static function read(&$data) {
-        if (count($data->selects)) $select = implode(", ", $data->selects);
+        if (count($data->selects)) $select = '`'.implode("`, `", $data->selects).'`';
         else $select = '*';
         $data->bindings = array();
         $data->sql = <<<SQL
@@ -15,6 +15,13 @@ SQL;
 SQL;
                 $first = 'AND';
                 $data->bindings[] = $where['variable'];
+            }
+        }
+        if ($data->order) {
+            $first = ' ORDER BY';
+            foreach ($data->order as $column => $direction) {
+                $data->sql .= " $first $column $direction";
+                $first = ',';
             }
         }
         if (isset($data->limit)) {
@@ -52,5 +59,20 @@ SQL;
                 $data->bindings[] = $where['variable'];
             }
         }
+    }
+    public static function create(&$data) {
+        $columns = array();
+        $bindings = array();
+        $data->bindings = array();
+        foreach ($data->data as $column => $value) {
+            $columns[] = "`$column`";
+            $bindings[] = '?';
+            $data->bindings[] = $value;
+        }
+        $columns = implode(', ', $columns);
+        $bindings = implode(', ', $bindings);
+        $data->sql = <<<SQL
+INSERT INTO `{$data->table}` ($columns, `created_at`, `updated_at`) VALUES ($bindings, NOW(), NOW());
+SQL;
     }
 }
