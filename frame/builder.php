@@ -55,4 +55,11 @@ class Builder {
         $this->order[$column] = $direction;
         return $this;
     }
+    public function whereNotIn($column, $values) {
+        $this->wheres[] = array('column' => $column, 'operator' => 'NOT IN', 'values' => $values);
+        return $this;
+    }
+    public function delete() {
+        $this->prepare('delete');
+    }
 }

@@ -33,7 +33,18 @@ class Form extends \Frame\View {
         $js = <<<JS
 $('#$key').submit(function(event) {
     event.preventDefault();
-    $('$target').load('?key=$key&' + $(this).serialize());
+    var hidden = [];
+    $('$target [id]').each(function() {
+        hidden.push($(this).attr('id'));
+    });
+    var ids = [];
+    $('body [id]').each(function() {
+        if ($.inArray($(this).attr('id'), hidden) >= 0) return true;
+        ids.push($(this).attr('id'));
+    });
+    $.ajax({url: '', type: 'post', data: {key: '$key', form: $(this).serializeArray(), clean: ids}}).success(function(html) {
+        $('$target').html(html);
+    });
 });
 JS;
         \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'action', 'navigation' => $this->action));

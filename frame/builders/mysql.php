@@ -7,16 +7,7 @@ class Mysql implements iBuilder {
         $data->sql = <<<SQL
 SELECT $select FROM `{$data->table}`
 SQL;
-        if (count($data->wheres)) {
-            $first = 'WHERE';
-            foreach ($data->wheres as $where) {
-                $data->sql .= <<<SQL
- $first `{$where['column']}` {$where['operator']} ?
-SQL;
-                $first = 'AND';
-                $data->bindings[] = $where['variable'];
-            }
-        }
+        self::where($data);
         if ($data->order) {
             $first = ' ORDER BY';
             foreach ($data->order as $column => $direction) {
@@ -30,6 +21,30 @@ SQL;
 SQL;
         }
         $data->sql .= ';';
+    }
+    private static function where(&$data) {
+        if (count($data->wheres)) {
+            $first = 'WHERE';
+            foreach ($data->wheres as $where) {
+                if (isset($where['variable'])) {
+                    $data->sql .= <<<SQL
+ $first `{$where['column']}` {$where['operator']} ?
+SQL;
+                    $data->bindings[] = $where['variable'];
+                } else {
+                    $bindings = array();
+                    foreach ($where['values'] as $value) {
+                        $bindings[] = '?';
+                        $data->bindings[] = $value;
+                    }
+                    $bindings = implode(', ', $bindings);
+                    $data->sql .= <<<SQL
+ $first `{$where['column']}` {$where['operator']} ($bindings)
+SQL;
+                }
+                $first = 'AND';
+            }
+        }
     }
     public static function update(&$data) {
         $sets = array();
@@ -49,16 +64,8 @@ SQL;
         $data->sql = <<<SQL
 UPDATE `{$data->table}` SET $set;
 SQL;
-        if (count($data->wheres)) {
-            $first = 'WHERE';
-            foreach ($data->wheres as $where) {
-                $data->sql .= <<<SQL
- $first `{$where['column']}` {$where['operator']} ?
-SQL;
-                $first = 'AND';
-                $data->bindings[] = $where['variable'];
-            }
-        }
+        self::where($data);
+        $data->sql .=';';
     }
     public static function create(&$data) {
         $columns = array();
@@ -74,5 +81,13 @@ SQL;
         $data->sql = <<<SQL
 INSERT INTO `{$data->table}` ($columns, `created_at`, `updated_at`) VALUES ($bindings, NOW(), NOW());
 SQL;
+    }
+    public static function delete(&$data) {
+        $data->bindings = array();
+        $data->sql = <<<SQL
+DELETE FROM `{$data->table}`
+SQL;
+        self::where($data);
+        $data->sql .=';';
     }
 }

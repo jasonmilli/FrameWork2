@@ -7,6 +7,7 @@ class Engine {
         $action = self::action($user_id);
         $action = self::parts($action);
         $action['data'] = self::data($user_id);
+        self::cleanup($user_id);
         if ($user_id || $action['class'] == '\Work\Controllers\Login' && $action['method'] == 'check') self::view($action);
         else self::login($action);
     }
@@ -34,18 +35,21 @@ class Engine {
     }
     private static function data($user_id) {
         $data = array();
-        foreach ($_REQUEST as $key => $value) {
-            if ($key == 'key') continue;
-            $name = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $key)->where('type', '=', 'name')->pluck('navigation');
-            if (!is_null($name)) $data[$name] = $value;
+        if (isset($_REQUEST['form'])) foreach ($_REQUEST['form'] as $input) {
+            $name = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $input['name'])->where('type', '=', 'name')->pluck('navigation');
+            if (!is_null($name)) $data[$name] = $input['value'];
         }
         return $data;
     }
     private static function view($action) {
         if ($action['data']) die($action['class']::$action['method']($action['data']));
-        die ($action['class']::$action['method']());
+        echo $action['class']::$action['method']();
     }
     private static function login($action) {
-        die(\Work\Controllers\Login::login($action));
+        echo \Work\Controllers\Login::login($action);
+    }
+    private static function cleanup($user_id) {
+        if ($user_id && arrayGet($_REQUEST, 'clean')) \Work\Models\Navigation::where('user_id', '=', $user_id)->whereNotIn('key', $_REQUEST['clean'])->delete();
+        if ($user_id == 0) \Work\Models\Navigation::where('user_id', '=', 0)->where('created_at', '<', date('Y-m-d H:i:s', strtotime('5 minutes ago')))->delete();
     }
 }
