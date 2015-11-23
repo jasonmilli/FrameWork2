@@ -21,6 +21,24 @@ class Button extends \Frame\View {
         $attributes = array('type' => 'button', 'id' => $key, 'value' => $this->text);
         \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'action', 'navigation' => $this->action));
         $button = $this->build('input', '', $attributes);
+        $js = <<<JS
+$('#$key').bind('click', function(event) {
+    event.preventDefault();
+    var hidden = [];
+    $('#$id [id]').each(function() {
+        hidden.push($(this).attr('id'));
+    });
+    var ids = [];
+    $('body [id]').each(function() {
+        if ($.inArray($(this).attr('id'), hidden) >= 0) return true;
+        ids.push($(this).attr('id'));
+    });
+    $.ajax({url: '', type: 'post', data: {key: '$key', clean: ids}}).success(function(html) {
+        $('#$id').html(html);
+    });
+});
+JS;
+        $script = $this->build('script', $js);
         $script = $this->build('script', '$("#'.$key.'").unbind("click").bind("click", function() {$("#'.$id.'").load("?key='.$key.'");})');
         return $button.$script;
     }

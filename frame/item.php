@@ -12,4 +12,13 @@ class Item {
         $this->builder->where($this->builder->primary_key, '=', $this->{$this->builder->primary_key});
         $this->builder->update($this);
     }
+    public function toArray() {
+        $return = array();
+        foreach($this as $key => $value) {
+            if ($key == 'result' || $key == 'builder') continue;
+            if (is_object($value)) $return[$key] = $value->toArray();
+            else $return[$key] = $value;
+        }
+        return $return;
+    }
 }
