@@ -8,9 +8,9 @@ class Engine {
         $action = self::parts($action);
         $action['data'] = self::data($user_id);
         self::cleanup($user_id);
-        $user = \Work\Models\User::with('group')->first()->toArray();
-        echo "<pre>".print_r($user, true)."</pre>";
-        $users = \Work\Models\User::with('group')->get()->toArray();
+        //$user = \Work\Models\User::with('group')->first()->toArray();
+        //echo "<pre>".print_r($user, true)."</pre>";
+        $users = \Work\Models\User::with('group.role')->get()->toArray();
         echo "<pre>".print_r($users, true)."</pre>";
         if ($user_id || $action['class'] == '\Work\Controllers\Login' && $action['method'] == 'check') self::view($action);
         else self::login($action);

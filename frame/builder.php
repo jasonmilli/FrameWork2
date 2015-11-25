@@ -32,9 +32,8 @@ class Builder {
         if ($result) {
             $item =  new \Frame\Item($result, $this);
             foreach ($this->withs as $function) {
-                $class = $this->class;
-                $with = $class::$function();
-                $item->$function = $with->first($result);
+                $collection = array($item);
+                \Frame\With::nest($collection, $this->class, $function);
             }
             return $item;
         }
@@ -83,17 +82,17 @@ class Builder {
         foreach ($functions as $function) {
             $this->withs[] = $function;
         }
+        return $this;
     }
     public function get() {
         $stmt = $this->prepare('read');
         $result = array();
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) $result[] = new \Frame\Item($row, $this);
+        $collection =  new \Frame\Collection($result);
         foreach ($this->withs as $function) {
-            $class = $this->class;
-            $with = $class::$function();
-            $with->get($result, $function);
+            \Frame\With::nest($collection, $this->class, $function);
         }
-        return new \Frame\Collection($result);
+        return $collection;
     }
     public function lists($column) {
         $this->selects = array($column);

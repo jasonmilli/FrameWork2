@@ -10,6 +10,79 @@ class With {
     private $link_primary_key = null;
     private $link_parent_column= null;
     private $link_child_column = null;
+    private $collection;
+    private $function;
+    public static function nest(&$collection, $class, $functions) {
+        $steps = self::getSteps($class, $functions);
+        self::getGets($collection, $steps);
+        //echo "<pre>".print_r($steps, true)."</pre>";
+        self::recurse(0, $steps, $collection);
+        //echo "<pre>".print_r($collection, true)."</pre>";
+    }
+    private static function recurse($count, $steps, &$collection) {
+        foreach ($collection as &$item) {
+            $array = array();
+            foreach ($steps[$count + 1]['get'] as $get) if ($item->{$steps[$count]['child_column']} == $get->{$steps[$count]['child_column']}) $array[] = $get;
+            $item->{$steps[$count]['function']} = new \Frame\Collection($array);
+            $counter = $count + 1;
+            if (isset($steps[$counter + 1])) self::recurse($counter, $steps, $item->{$steps[$count]['function']});
+        }
+    }
+    private static function getGets($collection, &$steps) {
+        $values = array();
+        foreach ($collection as $item) $values[] = $item->{$steps[0]['parent_column']};
+        foreach ($steps as $i => &$step) {
+            if (!$i) $step['get'] = $collection;
+            elseif (isset($step['parent_instance'])) $step['get'] = $step['parent_instance']->whereIn($step['parent_column'], $values)->get();
+            else {
+                $parent = $step['parent'];
+                $step['get'] = $parent::whereIn($step['parent_column'], $values)->get();
+            }
+            $values = array();
+            if (isset($step['child_column'])) foreach ($step['get'] as $item) $values[] = $item->{$step['child_column']};
+        }
+    }
+    private static function getSteps($class, $functions) {
+        $steps = array();
+        $functions = explode('.', $functions);
+        foreach ($functions as $function) {
+            $step = $class::$function();
+            $step['parent'] = $class;
+            if (!isset($step['parent_column'])) $step['parent_column'] = $class::$primary_key;
+            $class = $step['child'];
+            if (!isset($step['child_column'])) $step['child_column'] = $class::$primary_key;
+            $step['function'] = $function;
+            if ($step['type'] == 'manyMany') {
+                $db = \Frame\Config::get('database.'.arrayGet($step, 'config', 'default'));
+                $db['connection'] = arrayGet($step, 'config', 'default');
+                $connection = \Frame\Connection::get($db);
+                $builder = new \Frame\Builder($connection, $db, $step['link']['link_table'], arrayGet($step, 'link.link_primary_key', "{$step['link']['link_table']}_id"), null);
+                $steps[] = array(
+                    'type' => 'oneMany',
+                    'function' => $step['function'],
+                    'parent' => $step['parent'],
+                    'parent_column' => $step['parent_column'],
+                    'child_instance' => $builder,
+                    'child_column' => arrayGet($step, 'link.link_parent_column', $step['parent_column']),
+                );
+                $steps[] = array(
+                    'type' => 'manyOne',
+                    'function' => 'pivot',
+                    'parent_instance' => $builder,
+                    'parent_column' => arrayGet($step, 'link.link_parent_column', $step['child_column']),
+                    'child' => $step['child'],
+                    'child_column' => $step['child_column']
+                );
+            }
+            else $steps[] = $step;
+        }
+        $last_step = $steps[count($steps) - 1];
+        $step = array('parent_column' => $last_step['child_column']);
+        if (isset($last_step['child_instance'])) $step['parent_instance'] = $last_step['child_instance'];
+        else $step['parent'] = $last_step['child'];
+        $steps[] = $step;
+        return $steps;
+    }
     public function __construct($data) {
         $this->type = $data['type'];
         $this->parent_column = $data['parent_column'];
@@ -34,18 +107,9 @@ class With {
     }
     public function get(&$collection, $function) {
         foreach ($collection as $item) $this->parent_list[] = $item->{$this->parent_column};
-        $return = $this->{$this->type}();
-        foreach ($collection as &$item) {
-            $new_collection = array();
-            foreach ($return[0] as $link) {
-                if ($item->{$this->parent_column} == $link->{$this->parent_column}) {
-                    foreach ($return[1] as $child) {
-                        if ($link->{$this->child_column} == $child->{$this->child_column}) $new_collection[] = $child;
-                    }
-                }
-            }
-            $item->$function = new \Frame\Collection($new_collection);
-        }
+        $this->collection = $collection;
+        $this->function = $function;
+        $this->{$this->type}();
     }
     private function manyMany() {
         $db = Config::get('database.'.$this->link_config);
@@ -59,6 +123,16 @@ class With {
         $child = $this->child;
         $return = $child::whereIn($this->child_column, $children)->get();
         if (count($this->parent_list) <= 1) return $return;
-        return array($child_list, $return);
+        foreach ($this->collection as &$item) {
+            $collection = array();
+            foreach ($child_list as $link) {
+                if ($item->{$this->parent_column} == $link->{$this->parent_column}) {
+                    foreach ($return as $child) {
+                        if ($link->{$this->child_column} == $child->{$this->child_column}) $collection[] = $child;
+                    }
+                }
+            }
+            $item->{$this->function} = new \Frame\Collection($collection);
+        }
     }
 }
