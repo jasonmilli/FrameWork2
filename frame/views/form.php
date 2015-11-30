@@ -2,13 +2,13 @@
 class Form extends \Frame\View {
     private $inputs = array();
     private $target;
-    private $action;
-    public function __construct($action, $target) {
-        $this->action = $action;
+    private $controller;
+    public function __construct($controller, $target) {
+        $this->controller = $controller;
         $this->target = $target;
     }
-    public function input($label, $type, $value, $name = null) {
-        $this->inputs[] = array('label' => $label, 'type' => $type, 'value' => $value, 'name' => $name);
+    public function input($label, $type, $value, $input = null) {
+        $this->inputs[] = array('label' => $label, 'type' => $type, 'value' => $value, 'input' => $input);
     }
     public function render() {
         $columns = array();
@@ -17,8 +17,8 @@ class Form extends \Frame\View {
         foreach ($this->inputs as $input) {
             $id = \Frame\Key::get();
             $columns[] = array($input['label'], $this->build('input', '', array('name' => $id, 'type' => $input['type'], 'value' => $input['value'])));
-            if (is_null($input['name'])) continue;
-            \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $id, 'type' => 'name', 'navigation' => $input['name']));
+            if (is_null($input['input'])) continue;
+            \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $id, 'type' => 'input', 'navigation' => $input['input']));
         }
         $layout = new \Frame\Views\Layout($columns);
         $key = \Frame\Key::get();
@@ -47,7 +47,7 @@ $('#$key').submit(function(event) {
     });
 });
 JS;
-        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'action', 'navigation' => $this->action));
+        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'controller', 'navigation' => $this->controller));
         $script = $this->build('script', $js);
         return $form.$script;
     }

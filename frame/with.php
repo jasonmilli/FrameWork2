@@ -33,10 +33,10 @@ class With {
         foreach ($collection as $item) $values[] = $item->{$steps[0]['parent_column']};
         foreach ($steps as $i => &$step) {
             if (!$i) $step['get'] = $collection;
-            elseif (isset($step['parent_instance'])) $step['get'] = $step['parent_instance']->whereIn($step['parent_column'], $values)->get();
+            elseif (isset($step['parent_instance'])) $step['get'] = $step['parent_instance']->whereIn($steps[$i - 1]['parent_column'], $values)->get();
             else {
                 $parent = $step['parent'];
-                $step['get'] = $parent::whereIn($step['parent_column'], $values)->get();
+                $step['get'] = $parent::whereIn($steps[$i - 1]['parent_column'], $values)->get();
             }
             $values = array();
             if (isset($step['child_column'])) foreach ($step['get'] as $item) $values[] = $item->{$step['child_column']};

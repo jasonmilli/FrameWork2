@@ -2,9 +2,9 @@
 class Button extends \Frame\View {
     private $text = '';
     private $target;
-    private $action;
-    public function __construct($action, $target) {
-        $this->action = $action;
+    private $controller;
+    public function __construct($controller, $target) {
+        $this->controller = $controller;
         $this->target = $target;
     }
     public function text($text) {
@@ -13,24 +13,20 @@ class Button extends \Frame\View {
     public function render() {
         $key = \Frame\Key::get();
         $user_id = \Work\Models\User::where('session', '=', $_SESSION['frame_key'])->pluck('user_id');
+        if (is_null($user_id)) $user_id = 0;
         $id = \Work\Models\Navigation::where('user_id', '=', $user_id)
             ->where('type', '=', 'target')
             ->where('navigation', '=', $this->target)
             ->orderBy('navigation_id', 'desc')
             ->pluck('key');
         $attributes = array('type' => 'button', 'id' => $key, 'value' => $this->text);
-        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'action', 'navigation' => $this->action));
+        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'controller', 'navigation' => $this->controller));
         $button = $this->build('input', '', $attributes);
         $js = <<<JS
 $('#$key').bind('click', function(event) {
     event.preventDefault();
-    var hidden = [];
-    $('#$id [id]').each(function() {
-        hidden.push($(this).attr('id'));
-    });
     var ids = [];
     $('body [id]').each(function() {
-        if ($.inArray($(this).attr('id'), hidden) >= 0) return true;
         ids.push($(this).attr('id'));
     });
     $.ajax({url: '', type: 'post', data: {key: '$key', clean: ids}}).success(function(html) {
@@ -39,7 +35,7 @@ $('#$key').bind('click', function(event) {
 });
 JS;
         $script = $this->build('script', $js);
-        $script = $this->build('script', '$("#'.$key.'").unbind("click").bind("click", function() {$("#'.$id.'").load("?key='.$key.'");})');
+        //$script = $this->build('script', '$("#'.$key.'").unbind("click").bind("click", function() {$("#'.$id.'").load("?key='.$key.'");})');
         return $button.$script;
     }
 }

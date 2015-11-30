@@ -5,7 +5,6 @@ class Login extends \Frame\View {
         $this->data = $data;
     }
     public function render() {
-    print_r($this->data);
         $form = new \Frame\Views\Form('\Work\Controllers\Login::check', 'middle');
         $form->input('', 'hidden', $this->data['class'], 'class');
         $form->input('', 'hidden', $this->data['method'], 'method');

@@ -6,4 +6,7 @@ class Role extends \Frame\Model {
     public static function group() {
         return self::manyMany(array('child' => '\Work\Models\Group', 'link' => array('link_table' => 'group_role')));
     }
+    public static function controller() {
+        return self::manyMany(array('child' => '\Work\Models\Controller', 'link' => array('link_table' => 'role_controller')));
+    }
 }

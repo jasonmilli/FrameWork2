@@ -50,7 +50,6 @@ SQL;
         $sets = array();
         $primary_key_value = '';
         $data->bindings = array();
-        //throw new \Exception(print_r($data->updates, true));
         foreach ($data->updates as $column => $value) {
             if ($column == 'updated_at') {
                 $sets[] = '`updated_at` = NOW()';
@@ -62,7 +61,7 @@ SQL;
         }
         $set = implode(", ", $sets);
         $data->sql = <<<SQL
-UPDATE `{$data->table}` SET $set;
+UPDATE `{$data->table}` SET $set
 SQL;
         self::where($data);
         $data->sql .=';';
