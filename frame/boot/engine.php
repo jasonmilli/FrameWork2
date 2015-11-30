@@ -2,18 +2,21 @@
 class Engine {
     public static function start() {
         self::config();
-        $user_id = self::session();
-        if (is_null($user_id)) $user_id = 0;
-        $controller = self::controller($user_id);
+        $user = self::session();
+        if (is_null($user)) {
+            $user = new \STDClass();
+            $user->user_id = 0;
+        }
+        $controller = self::controller($user);
         $controller = self::parts($controller);
-        $controller['data'] = self::data($user_id);
-        self::cleanup($user_id);
+        $controller['data'] = self::data($user->user_id);
+        self::cleanup($user->user_id);
         //$user = \Work\Models\User::with('group')->first()->toArray();
         //echo "<pre>".print_r($user, true)."</pre>";
-        $users = \Work\Models\User::with('group.role.controller')->get()->toArray();
+        //$users = \Work\Models\User::with('group.role.controller')->get()->toArray();
         //$users = \Work\Models\Role::with('controller')->get()->toArray();
-        echo "<pre>".print_r($users, true)."</pre>";
-        if ($user_id || $controller['class'] == '\Work\Controllers\Login' && $controller['method'] == 'check') self::view($controller);
+        //echo "<pre>".print_r($users, true)."</pre>";
+        if ($user->user_id || $controller['class'] == '\Work\Controllers\Login' && $controller['method'] == 'check') self::view($controller);
         else self::login($controller);
     }
     private static function config() {
@@ -25,12 +28,27 @@ class Engine {
             $_SESSION['frame_key'] = \Frame\Key::get();
             return null;
         }
-        return \Work\Models\User::where('session', '=', $_SESSION['frame_key'])->pluck('user_id');
+        return \Work\Models\User::with('group.role.controller')->where('session', '=', $_SESSION['frame_key'])->first();
     }
-    private static function controller($user_id) {
+    private static function controller($user) {
         if (isset($_REQUEST['key'])) {
-            $controller = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $_REQUEST['key'])->where('type', '=', 'controller')->pluck('navigation');
-            if (!is_null($controller)) return $controller;
+            $controller_id = \Work\Models\Navigation::where('user_id', '=', $user->user_id)->where('key', '=', $_REQUEST['key'])->where('type', '=', 'controller')->pluck('navigation');
+            if (!is_null($controller_id)) {
+                if (isset($user->group)) {
+                    foreach ($user->group as $group) {
+                        foreach ($group->pivot->role as $role) {
+                            foreach ($role->pivot->controller as $controller) {
+                                if ($controller->controller_id == $controller_id) {
+                                    return $controller->controller;
+                                }
+                            }
+                        }
+                    }
+                    return '\Work\Controllers\Login::deny';
+                }
+                $controller = \Work\Models\Controller::where('controller_id', '=', $controller_id)->pluck('controller');
+                if ($controller == '\Work\Controllers\Login::check') return $controller;
+            }
         }
         return '\Work\Controllers\Main::start';
     }

@@ -47,7 +47,8 @@ $('#$key').submit(function(event) {
     });
 });
 JS;
-        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'controller', 'navigation' => $this->controller));
+        $controller_id = \Work\Models\Controller::where('controller', '=', $this->controller)->pluck('controller_id');
+        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'controller', 'navigation' => $controller_id));
         $script = $this->build('script', $js);
         return $form.$script;
     }

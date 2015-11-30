@@ -20,7 +20,8 @@ class Button extends \Frame\View {
             ->orderBy('navigation_id', 'desc')
             ->pluck('key');
         $attributes = array('type' => 'button', 'id' => $key, 'value' => $this->text);
-        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'controller', 'navigation' => $this->controller));
+        $controller_id = \Work\Models\Controller::where('controller', '=', $this->controller)->pluck('controller_id');
+        \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'controller', 'navigation' => $controller_id));
         $button = $this->build('input', '', $attributes);
         $js = <<<JS
 $('#$key').bind('click', function(event) {
