@@ -14,7 +14,8 @@ class Layout extends \Frame\View {
                     $key = \Frame\Key::get();
                     $user_id = \Work\Models\User::where('session', '=', $_SESSION['frame_key'])->pluck('user_id');
                     if (is_null($user_id)) $user_id = 0;
-                    \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'target', 'navigation' => $target));
+                    $target_id = \Work\Models\Target::where('target', '=', $target)->pluck('target_id');
+                    \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'target', 'navigation' => $target_id));
                     $attributes = array('id' => $key);
                 }
                 if (is_string($detail)) $tr .= $this->build('td', $detail, $attributes);

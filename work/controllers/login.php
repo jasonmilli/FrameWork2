@@ -23,4 +23,8 @@ class Login extends \Frame\Controller {
         $result = new \Work\Views\FailedLogin($controller);
         return $result->render();
     }
+    public static function deny() {
+        $deny = new \Work\Views\Deny;
+        return $deny->render();
+    }
 }

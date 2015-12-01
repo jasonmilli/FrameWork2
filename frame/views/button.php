@@ -14,9 +14,10 @@ class Button extends \Frame\View {
         $key = \Frame\Key::get();
         $user_id = \Work\Models\User::where('session', '=', $_SESSION['frame_key'])->pluck('user_id');
         if (is_null($user_id)) $user_id = 0;
+        $target_id = \Work\Models\Target::where('target', '=', $this->target)->pluck('target_id');
         $id = \Work\Models\Navigation::where('user_id', '=', $user_id)
             ->where('type', '=', 'target')
-            ->where('navigation', '=', $this->target)
+            ->where('navigation', '=', $target_id)
             ->orderBy('navigation_id', 'desc')
             ->pluck('key');
         $attributes = array('type' => 'button', 'id' => $key, 'value' => $this->text);

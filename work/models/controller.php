@@ -6,4 +6,7 @@ class Controller extends \Frame\Model {
     public static function role() {
         return $this->manyMany(array('child' => '\Work\Models\Role', 'link' => array('link_table' => 'role_controller')));
     }
+    public static function input() {
+        return $this->oneMany(array('child' => '\Work\Models\Input'));
+    }
 }

@@ -28,7 +28,7 @@ CREATE TABLE `controller` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`controller_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `controller` (
 
 LOCK TABLES `controller` WRITE;
 /*!40000 ALTER TABLE `controller` DISABLE KEYS */;
-INSERT INTO `controller` VALUES (1,'\\Work\\Controllers\\Login::login','2015-11-30 20:41:04','2015-11-30 20:41:04'),(2,'\\Work\\Controllers\\Login::check','2015-11-30 20:41:24','2015-11-30 20:41:24');
+INSERT INTO `controller` VALUES (1,'\\Work\\Controllers\\Login::login','2015-11-30 20:41:04','2015-11-30 20:41:04'),(2,'\\Work\\Controllers\\Login::check','2015-11-30 20:41:24','2015-11-30 20:41:24'),(3,'\\Work\\Controllers\\Main::start','2015-12-01 19:28:35','2015-12-01 19:28:35'),(4,'\\Work\\Controllers\\Main::middle','2015-12-01 19:28:50','2015-12-01 19:28:50'),(5,'\\Work\\Controllers\\Main::welcome','2015-12-01 19:29:04','2015-12-01 19:29:04');
 /*!40000 ALTER TABLE `controller` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,7 +143,7 @@ CREATE TABLE `key` (
 
 LOCK TABLES `key` WRITE;
 /*!40000 ALTER TABLE `key` DISABLE KEYS */;
-INSERT INTO `key` VALUES (1,'default','000000000000000000000000000000Cl','2015-10-29 22:42:27','2015-11-30 22:43:11');
+INSERT INTO `key` VALUES (1,'default','000000000000000000000000000000GH','2015-10-29 22:42:27','2015-12-01 22:31:02');
 /*!40000 ALTER TABLE `key` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,7 +163,7 @@ CREATE TABLE `navigation` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`navigation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1296 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1558 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,7 +172,7 @@ CREATE TABLE `navigation` (
 
 LOCK TABLES `navigation` WRITE;
 /*!40000 ALTER TABLE `navigation` DISABLE KEYS */;
-INSERT INTO `navigation` VALUES (1198,1,'76e423fcbb30147548e960badfacc80791afc1f270f6d9bf083306a29ac1fb64','target','welcome','2015-11-30 22:07:58','2015-11-30 22:07:58'),(1202,1,'a2954fd290c9f2ae1d480133ed715bc7d98c6c52fca89e32ac016b0153e5afcd','target','middle','2015-11-30 22:07:58','2015-11-30 22:07:58'),(1203,1,'fd91561143be5b3bd7f02a32b028f8bd2d09abb601d9eeb60f9b2c2f63e22dc2','target','welcome','2015-11-30 22:08:06','2015-11-30 22:08:06'),(1204,1,'bcd33800f90b78dd32f660eae1c5092bda3cb7907cd01269cf2de0cfef082104','input','name','2015-11-30 22:08:06','2015-11-30 22:08:06'),(1205,1,'dd86f61100aa431aae6c327f64288a937aecf5eaf900a9dd365d1f1b160881f7','input','age','2015-11-30 22:08:06','2015-11-30 22:08:06'),(1206,1,'34e1d6f1db547b07eaaef4def8f4008f7926fa3dc2d76c46a19c5c6b008d9e72','input','submit','2015-11-30 22:08:06','2015-11-30 22:08:06'),(1207,1,'2e677917118a67c7c7648e24f6b1a450da7abaa2a7d0b93f107ac8ef102ab00b','target','middle','2015-11-30 22:08:06','2015-11-30 22:08:06'),(1208,1,'079e8e205b6a24594555f7ff5c86734f1266e2ee10d23bc7d43db361f755debe','target','welcome','2015-11-30 22:12:03','2015-11-30 22:12:03'),(1209,1,'f350649e19da7782d4e800cf15ff42a24c083f33872f2cf83d6ca35ff81b0025','input','name','2015-11-30 22:12:03','2015-11-30 22:12:03'),(1210,1,'d38d7d8ab8f62e22691d1b973a1c2891603005e615aad6845ef70ab2a793cc8d','input','age','2015-11-30 22:12:03','2015-11-30 22:12:03'),(1211,1,'a2fd002a8e41756e3332ce5fb158c94a02b1ca1d06ae470054bce1f5966e37d5','input','submit','2015-11-30 22:12:03','2015-11-30 22:12:03'),(1212,1,'54fe33207b5e31a472ec2b1781c1ed3fb93720abf2668adbca4c76cef79bb2e8','target','middle','2015-11-30 22:12:03','2015-11-30 22:12:03'),(1274,1,'8cfbdee18161605f22797f95196d219ccdc0d25794b30673b161f89b5ca1e1b5','target','welcome','2015-11-30 22:42:46','2015-11-30 22:42:46'),(1275,1,'2e2417f6b331f0236f1bd5122ef9fe731d68dfae2dea6e0a4c6a17d12f5e71d0','input','name','2015-11-30 22:42:46','2015-11-30 22:42:46'),(1276,1,'d6277458ec07a437c7241a5a159464fd5e1691322a9a94485b534def3b88ce61','input','age','2015-11-30 22:42:46','2015-11-30 22:42:46'),(1277,1,'e42e27745e50a3e6522a0886363907b74994a219cff5111a6258b54e2aee71e4','input','submit','2015-11-30 22:42:46','2015-11-30 22:42:46'),(1278,1,'d9690c92b3a47b828fce880e82243f545eeec804fe4e231fd99cfb35cec70f0a','target','middle','2015-11-30 22:42:46','2015-11-30 22:42:46'),(1291,1,'c9199ec9989c463fa1c9904f435af5e1b07aa1c54604a9935c3c21a9b91fbc9a','target','welcome','2015-11-30 22:43:10','2015-11-30 22:43:10'),(1292,1,'7141f6397b5e3d0fa621ab2e56ca71b2d254a5c50507c8f79faa983f1399dee6','input','name','2015-11-30 22:43:10','2015-11-30 22:43:10'),(1293,1,'4d800703065e2b9ff40ba06601decc6bdf3dd9fa6d91096858dc9dd804d228ef','input','age','2015-11-30 22:43:10','2015-11-30 22:43:10'),(1294,1,'32b99e03e7918b2053a73c9477549f69f76c1dc6b5b51c456789ac677f582755','input','submit','2015-11-30 22:43:11','2015-11-30 22:43:11'),(1295,1,'199d63d6b3c09f3954e304e3d8fa2a170ac969cb0a686cab34078355d917effc','target','middle','2015-11-30 22:43:11','2015-11-30 22:43:11');
+INSERT INTO `navigation` VALUES (1551,1,'510d5dbc0ce4b0624b921d6baf9e32847d3520d9df52ff21243f72958af8e770','target','1','2015-12-01 22:31:02','2015-12-01 22:31:02'),(1556,1,'d6746055c4a59c4d1366b39ea02f7bcb2a7e092dfa4d177f3fbd4aee759a295f','target','2','2015-12-01 22:31:02','2015-12-01 22:31:02');
 /*!40000 ALTER TABLE `navigation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +216,7 @@ CREATE TABLE `role_controller` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`role_controller_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,8 +225,34 @@ CREATE TABLE `role_controller` (
 
 LOCK TABLES `role_controller` WRITE;
 /*!40000 ALTER TABLE `role_controller` DISABLE KEYS */;
-INSERT INTO `role_controller` VALUES (1,1,1,'2015-11-30 19:39:15','2015-11-30 19:39:15'),(2,1,2,'2015-11-30 19:41:35','2015-11-30 19:41:35');
+INSERT INTO `role_controller` VALUES (1,1,1,'2015-11-30 19:39:15','2015-11-30 19:39:15'),(2,1,2,'2015-11-30 19:41:35','2015-11-30 19:41:35'),(3,1,3,'2015-12-01 21:04:21','2015-12-01 21:04:21'),(4,1,4,'2015-12-01 21:04:34','2015-12-01 21:04:34');
 /*!40000 ALTER TABLE `role_controller` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `target`
+--
+
+DROP TABLE IF EXISTS `target`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `target` (
+  `target_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `target` varchar(100) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`target_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `target`
+--
+
+LOCK TABLES `target` WRITE;
+/*!40000 ALTER TABLE `target` DISABLE KEYS */;
+INSERT INTO `target` VALUES (1,'welcome','2015-12-01 22:11:10','2015-12-01 22:11:10'),(2,'middle','2015-12-01 22:11:16','2015-12-01 22:11:16');
+/*!40000 ALTER TABLE `target` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -294,4 +320,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-30 22:45:31
+-- Dump completed on 2015-12-01 22:45:35

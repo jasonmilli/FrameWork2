@@ -22,9 +22,10 @@ class Form extends \Frame\View {
         }
         $layout = new \Frame\Views\Layout($columns);
         $key = \Frame\Key::get();
+        $target_id = \Work\Models\Target::where('target', '=', $this->target)->pluck('target_id');
         $target = \Work\Models\Navigation::where('user_id', '=', $user_id)
             ->where('type', '=', 'target')
-            ->where('navigation', '=', $this->target)
+            ->where('navigation', '=', $target_id)
             ->orderBy('navigation_id', 'desc')
             ->pluck('key');
         if (is_null($target)) $target = 'body';

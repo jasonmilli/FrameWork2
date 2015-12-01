@@ -20,10 +20,21 @@ class With {
         //echo "<pre>".print_r($collection, true)."</pre>";
     }
     private static function recurse($count, $steps, &$collection) {
+        if (is_null($collection)) return;
+        if (is_object($collection) && get_class($collection) == 'Frame\Item') {
+            $array = array();
+            foreach ($steps[$count + 1]['get'] as $get) if ($collection->{$steps[$count]['child_column']} == $get->{$steps[$count]['child_column']}) $array[] = $get;
+            if ($steps[$count]['type'] == 'oneMany') $collection->{$steps[$count]['function']} = new \Frame\Collection($array);
+            elseif ($array) $collection->{$steps[$count]['function']} = $array[0];
+            $counter = $count + 1;
+            if (isset($steps[$counter + 1])) self::recurse($counter, $steps, $collection->{$steps[$count]['function']});
+            return;
+        }
         foreach ($collection as &$item) {
             $array = array();
             foreach ($steps[$count + 1]['get'] as $get) if ($item->{$steps[$count]['child_column']} == $get->{$steps[$count]['child_column']}) $array[] = $get;
-            $item->{$steps[$count]['function']} = new \Frame\Collection($array);
+            if ($steps[$count]['type'] == 'oneMany') $item->{$steps[$count]['function']} = new \Frame\Collection($array);
+            elseif ($array) $item->{$steps[$count]['function']} = $array[0];
             $counter = $count + 1;
             if (isset($steps[$counter + 1])) self::recurse($counter, $steps, $item->{$steps[$count]['function']});
         }

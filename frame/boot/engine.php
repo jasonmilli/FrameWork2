@@ -36,18 +36,22 @@ class Engine {
             if (!is_null($controller_id)) {
                 if (isset($user->group)) {
                     foreach ($user->group as $group) {
-                        foreach ($group->pivot->role as $role) {
-                            foreach ($role->pivot->controller as $controller) {
-                                if ($controller->controller_id == $controller_id) {
-                                    return $controller->controller;
+                        if (isset($group->pivot->role)) {
+                            foreach ($group->pivot->role as $role) {
+                                if (isset($role->pivot->controller)) {
+                                    foreach ($role->pivot->controller as $controller) {
+                                        if ($controller->pivot->controller_id == $controller_id) {
+                                            return $controller->pivot->controller;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                    return '\Work\Controllers\Login::deny';
                 }
                 $controller = \Work\Models\Controller::where('controller_id', '=', $controller_id)->pluck('controller');
                 if ($controller == '\Work\Controllers\Login::check') return $controller;
+                else return '\Work\Controllers\Login::deny';
             }
         }
         return '\Work\Controllers\Main::start';
