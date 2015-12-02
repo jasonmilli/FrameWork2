@@ -18,7 +18,8 @@ class Form extends \Frame\View {
             $id = \Frame\Key::get();
             $columns[] = array($input['label'], $this->build('input', '', array('name' => $id, 'type' => $input['type'], 'value' => $input['value'])));
             if (is_null($input['input'])) continue;
-            \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $id, 'type' => 'input', 'navigation' => $input['input']));
+            $input_id = \Work\Models\Input::where('input', '=', $input['input'])->pluck('input_id');
+            \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $id, 'type' => 'input', 'navigation' => $input_id));
         }
         $layout = new \Frame\Views\Layout($columns);
         $key = \Frame\Key::get();

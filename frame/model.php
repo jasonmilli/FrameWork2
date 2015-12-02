@@ -11,9 +11,11 @@ class Model {
         return $builder;
     }
     public static function manyMany($data) {
-        //if (!isset($data['parent_column'])) $data['parent_column'] = static::$primary_key;
         $data['type'] = 'manyMany';
-        //return new \Frame\With($data);
+        return $data;
+    }
+    public static function manyOne($data) {
+        $data['type'] = 'manyOne';
         return $data;
     }
 }

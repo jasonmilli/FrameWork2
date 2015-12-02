@@ -63,8 +63,16 @@ class Engine {
     private static function data($user_id) {
         $data = array();
         if (isset($_REQUEST['form'])) foreach ($_REQUEST['form'] as $input) {
-            $name = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $input['name'])->where('type', '=', 'input')->pluck('navigation');
-            if (!is_null($name)) $data[$name] = $input['value'];
+            $input_id = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $input['name'])->where('type', '=', 'input')->pluck('navigation');
+            $name = \Work\Models\Input::with('validation')->where('input_id', '=', $input_id)->first();
+            if (!is_null($name->input)) $data[$name->input] = $input['value'];
+            foreach ($name->validation as $validation) {
+                $function = $validation->pivot->validation;
+                $parts = explode('::', $function);
+                $class = $parts[0];
+                $method = $parts[1];
+                if ($return = $class::$method($input['value'])) throw new \Exception($return);
+            }
         }
         return $data;
     }
