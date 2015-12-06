@@ -26,7 +26,7 @@ SQL;
         if (count($data->wheres)) {
             $first = 'WHERE';
             foreach ($data->wheres as $where) {
-                if (isset($where['variable'])) {
+                if (array_key_exists('variable', $where)) {
                     $data->sql .= <<<SQL
  $first `{$where['column']}` {$where['operator']} ?
 SQL;
