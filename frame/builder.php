@@ -61,6 +61,7 @@ class Builder {
     public function create($data) {
         $this->data = $data;
         $this->prepare('create');
+        return $this->connection->lastInsertId();
     }
     public function orderBy($column, $direction = 'asc') {
         $this->order[$column] = $direction;

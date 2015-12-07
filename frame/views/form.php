@@ -16,7 +16,7 @@ class Form extends \Frame\View {
         if (is_null($user_id)) $user_id = 0;
         foreach ($this->inputs as $input) {
             $id = \Frame\Key::get();
-            $columns[] = array($input['label'], $this->build('input', '', array('name' => $id, 'type' => $input['type'], 'value' => $input['value'])));
+            $columns[] = array($input['label'], $this->build('input', '', array('id' => $id, 'name' => $id, 'type' => $input['type'], 'value' => $input['value'])));
             if (is_null($input['input'])) continue;
             $input_id = \Work\Models\Input::where('input', '=', $input['input'])->pluck('input_id');
             \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $id, 'type' => 'input', 'navigation' => $input_id));
