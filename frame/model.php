@@ -5,9 +5,9 @@ class Model {
         $db['connection'] = static::$config;
         $connection = Connection::get($db);
         $builder = new Builder($connection, $db, static::$table, static::$primary_key, static::class);
-        call_user_func_array(array($builder, $name), $arguments);
         if ($name == 'first' || $name == 'get' || $name == 'pluck') return $builder->$name();
-        if ($name == 'lists') return $builder->$name($arguments[0]);
+        if ($name == 'lists' || $name == 'create') return $builder->$name($arguments[0]);
+        call_user_func_array(array($builder, $name), $arguments);
         return $builder;
     }
     public static function manyMany($data) {

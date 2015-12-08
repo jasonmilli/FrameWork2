@@ -31,8 +31,13 @@ $('#$key').bind('click', function(event) {
     $('body [id]').each(function() {
         ids.push($(this).attr('id'));
     });
-    $.ajax({url: '', type: 'post', data: {key: '$key', clean: ids}}).success(function(html) {
-        $('#$id').html(html);
+    $.ajax({url: '', type: 'post', dataType: 'json', data: {key: '$key', clean: ids}}).success(function(json) {
+        if (!json.status || !json.html || json.status != 'COMPLETE') {
+            var message = json.message || 'System error, check logs';
+            alert(message);
+            return false;
+        }
+        $('#$id').html(json.html);
     });
 });
 JS;

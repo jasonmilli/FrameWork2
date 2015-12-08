@@ -35,7 +35,7 @@ class Testing {
         unset($data['output']);
         $result = $class::$function($data);
         $panels[] = array($result);
-        $form = new \Frame\Views\Form('\Work\Controller\Testing::save', 'save_test');
+        $form = new \Frame\Views\Form('\Work\Controllers\Testing::save', 'save_test');
         $form->input('', 'hidden', $result, 'result');
         $form->input('', 'hidden', $controller, 'output_controller');
         foreach ($data as $name => $input) $form->input('', 'hidden', $input, $name);
@@ -55,5 +55,27 @@ class Testing {
             \Work\Models\TestInput::create(array('test_id' => $test_id, 'input_id' => $input_id, 'input' => $input));
         }
         return 'Test saved';
+    }
+    public static function tests() {
+        $tests = \Work\Models\Test::get();
+        $rows = array();
+        foreach ($tests as $test) {
+            $test_inputs = \Work\Models\TestInput::where('test_id', '=', $test->test_id)->get();
+            $data = array();
+            foreach ($test_inputs as $test_input) {
+                $input = \Work\Models\Input::where('input_id', '=', $test_input->input_id)->pluck('input');
+                if (is_null($input)) throw new \Exception("No input found for {$test_input->test_input_id}");
+                $data[$input] = $test_input->input;
+            }
+            $controller = \Work\Models\Controller::where('controller_id', '=', $test->controller_id)->pluck('controller');
+            list($class, $function) = explode('::', $controller);
+            if ($data) $result = $class::$function($data);
+            else $result = $class::$function();
+            if ($test->result == $result) $pass = 'Pass';
+            else $pass = 'Fail';
+            $rows[] = array($controller, $test->result, $result, $pass);
+        }
+        $layout = new \Frame\Views\Layout($rows);
+        return $layout->render();
     }
 }

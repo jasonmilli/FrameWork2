@@ -26,6 +26,7 @@ SQL;
         if (count($data->wheres)) {
             $first = 'WHERE';
             foreach ($data->wheres as $where) {
+                if (strpos($where['column'], '`') !== false) throw new \Exception("{$where['column']} is not a legal column name");//Cheers Max!
                 if (array_key_exists('variable', $where)) {
                     $data->sql .= <<<SQL
  $first `{$where['column']}` {$where['operator']} ?
@@ -55,6 +56,7 @@ SQL;
                 $sets[] = '`updated_at` = NOW()';
                 continue;
             }
+            if (strpos($column, '`') !== false) throw new \Exception("$column is not a legal column name");//Cheers Max!
             $sets[] = "`$column` = ?";
             $data->bindings[] = $value;
             if ($column == $data->primary_key) $primary_key_value = $value;
@@ -71,6 +73,7 @@ SQL;
         $bindings = array();
         $data->bindings = array();
         foreach ($data->data as $column => $value) {
+            if (strpos($column, '`') !== false) throw new \Exception("$column is not a legal column name");//Cheers Max!
             $columns[] = "`$column`";
             $bindings[] = '?';
             $data->bindings[] = $value;

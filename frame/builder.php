@@ -51,7 +51,11 @@ class Builder {
         $class = "\\Frame\\Builders\\{$this->db['driver']}";
         $class::$type($this);
         $stmt = $this->connection->prepare($this->sql);
-        $stmt->execute($this->bindings);
+        try {
+            $stmt->execute($this->bindings);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage().$this->sql);
+        }
         return $stmt;
     }
     public function update($updates) {

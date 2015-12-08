@@ -44,12 +44,18 @@ $('#$key').submit(function(event) {
         if ($.inArray($(this).attr('id'), hidden) >= 0) return true;
         ids.push($(this).attr('id'));
     });
-    $.ajax({url: '', type: 'post', data: {key: '$key', form: $(this).serializeArray(), clean: ids}}).success(function(html) {
-        $('$target').html(html);
+    $.ajax({url: '', type: 'post', dataType: 'json', data: {key: '$key', form: $(this).serializeArray(), clean: ids}}).success(function(json) {
+        if (!json.status || json.status != 'COMPLETE' || !json.html) {
+            var message = json.message || 'System error, check logs';
+            alert(message);
+            return false;
+        }
+        $('$target').html(json.html);
     });
 });
 JS;
         $controller_id = \Work\Models\Controller::where('controller', '=', $this->controller)->pluck('controller_id');
+        if (is_null($controller_id)) throw new \Exception("{$this->controller} not found in controller table}");
         \Work\Models\Navigation::create(array('user_id' => $user_id, 'key' => $key, 'type' => 'controller', 'navigation' => $controller_id));
         $script = $this->build('script', $js);
         return $form.$script;

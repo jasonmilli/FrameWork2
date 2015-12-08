@@ -1,6 +1,13 @@
 <?php namespace Frame\Boot;
 class Engine {
     public static function start() {
+        try {
+            self::steps();
+        } catch (\Exception $e) {
+            echo json_encode(array('status' => 'ERROR', 'message' => $e->getMessage().$e->getTraceAsString()));
+        }
+    }
+    private static function steps() {
         self::config();
         $user = self::session();
         if (is_null($user)) {
@@ -16,7 +23,8 @@ class Engine {
         //$users = \Work\Models\User::with('group.role.controller')->get()->toArray();
         //$users = \Work\Models\Role::with('controller')->get()->toArray();
         //echo "<pre>".print_r($users, true)."</pre>";
-        if ($user->user_id || $controller['class'] == '\Work\Controllers\Login' && $controller['method'] == 'check') self::view($controller);
+        if ($controller['class'] == '\Work\Controllers\Main' && $controller['method'] == 'start') self::main();
+        elseif ($user->user_id || $controller['class'] == '\Work\Controllers\Login' && $controller['method'] == 'check') self::view($controller);
         else self::login($controller);
     }
     private static function config() {
@@ -64,6 +72,7 @@ class Engine {
         $data = array();
         if (isset($_REQUEST['form'])) foreach ($_REQUEST['form'] as $input) {
             $input_id = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $input['name'])->where('type', '=', 'input')->pluck('navigation');
+            if (is_null($input_id)) throw new \Exception("{$input['name']} not found in navigation table");
             $name = \Work\Models\Input::with('validation')->where('input_id', '=', $input_id)->first();
             if (!is_null($name->input)) $data[$name->input] = $input['value'];
             foreach ($name->validation as $validation) {
@@ -76,12 +85,15 @@ class Engine {
         }
         return $data;
     }
+    private static function main() {
+        echo \Work\Controllers\Main::start();
+    }
     private static function view($controller) {
-        if ($controller['data']) die($controller['class']::$controller['method']($controller['data']));
-        echo $controller['class']::$controller['method']();
+        if ($controller['data']) echo json_encode(array('status' => 'COMPLETE', 'html' => $controller['class']::$controller['method']($controller['data'])));
+        else echo json_encode(array('status' => 'COMPLETE', 'html' => $controller['class']::$controller['method']()));
     }
     private static function login($controller) {
-        echo \Work\Controllers\Login::login($controller);
+        echo json_encode(array('status' => 'COMPLETE', 'html' => \Work\Controllers\Login::login($controller)));
     }
     private static function cleanup($user_id) {
         if ($user_id && arrayGet($_REQUEST, 'clean')) \Work\Models\Navigation::where('user_id', '=', $user_id)->whereNotIn('key', $_REQUEST['clean'])->delete();
