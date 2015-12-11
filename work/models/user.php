@@ -6,4 +6,7 @@ class User extends \Frame\Model {
     public static function group() {
         return self::manyMany(array('child' => '\Work\Models\Group', 'link' => array('link_table' => 'user_group')));
     }
+    public static function store() {
+        return self::oneMany(array('child' => '\Work\Models\Store'));
+    }
 }

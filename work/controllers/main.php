@@ -15,7 +15,10 @@ class Main extends \Frame\Controller {
     public static function middle() {
         $p = new \Frame\Views\Paragraph;
         $p->text('This button is working');
-        return $p->render();
+        $style = new \Frame\Style($p, array('background-color' => 'darkgrey'));
+        $style->style('color', 'orange');
+        //$style->('color', 'red', 'p');
+        return $style->render();
     }
     public static function welcome($data) {
         $p = new \Frame\Views\Paragraph;

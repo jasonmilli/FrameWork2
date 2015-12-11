@@ -111,7 +111,7 @@ CREATE TABLE `input` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`input_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +120,7 @@ CREATE TABLE `input` (
 
 LOCK TABLES `input` WRITE;
 /*!40000 ALTER TABLE `input` DISABLE KEYS */;
-INSERT INTO `input` VALUES (1,5,'Name:','text','','name','2015-12-02 20:53:34','2015-12-02 20:53:34'),(2,5,'Age:','text','','age','2015-12-02 20:53:41','2015-12-02 20:53:41'),(3,5,'','submit','Submit','submit','2015-12-02 21:05:19','2015-12-02 21:05:19'),(4,8,'','submit','Test','inputs_submit','2015-12-05 13:05:28','2015-12-05 13:05:28'),(5,9,'','hidden','','output','2015-12-07 19:20:30','2015-12-07 19:20:30'),(6,10,'','hidden','','result','2015-12-07 22:14:10','2015-12-07 22:14:10'),(7,10,'','hidden','','output_controller','2015-12-07 22:14:28','2015-12-07 22:14:28');
+INSERT INTO `input` VALUES (1,5,'Name:','text','','name','2015-12-02 20:53:34','2015-12-02 20:53:34'),(2,5,'Age:','text','','age','2015-12-02 20:53:41','2015-12-02 20:53:41'),(3,5,'','submit','Submit','submit','2015-12-02 21:05:19','2015-12-02 21:05:19'),(4,8,'','submit','Test','inputs_submit','2015-12-05 13:05:28','2015-12-05 13:05:28'),(5,9,'','hidden','','output','2015-12-07 19:20:30','2015-12-07 19:20:30'),(6,10,'','hidden','','result','2015-12-07 22:14:10','2015-12-07 22:14:10'),(7,10,'','hidden','','output_controller','2015-12-07 22:14:28','2015-12-07 22:14:28'),(8,2,'','hidden','','class','2015-12-10 22:54:47','2015-12-10 22:54:47'),(9,2,'','hidden','','method','2015-12-10 22:54:53','2015-12-10 22:54:53'),(10,2,'Username','text','','username','2015-12-10 22:55:45','2015-12-10 22:55:45'),(11,2,'Password','password','','password','2015-12-10 22:56:31','2015-12-10 22:56:31');
 /*!40000 ALTER TABLE `input` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +174,7 @@ CREATE TABLE `key` (
 
 LOCK TABLES `key` WRITE;
 /*!40000 ALTER TABLE `key` DISABLE KEYS */;
-INSERT INTO `key` VALUES (1,'default','0000000000000000000000000000018B','2015-10-29 22:42:27','2015-12-08 22:29:47');
+INSERT INTO `key` VALUES (1,'default','000000000000000000000000000001e6','2015-10-29 22:42:27','2015-12-10 23:33:27');
 /*!40000 ALTER TABLE `key` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +194,7 @@ CREATE TABLE `navigation` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`navigation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3159 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3414 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,7 +203,7 @@ CREATE TABLE `navigation` (
 
 LOCK TABLES `navigation` WRITE;
 /*!40000 ALTER TABLE `navigation` DISABLE KEYS */;
-INSERT INTO `navigation` VALUES (2912,1,'333eb08c0b2ccb8dd7628c81d418d12f3c8a1590328a8913f207655cd362d3fd','target',2,'2015-12-08 19:25:02','2015-12-08 19:25:02'),(2913,1,'aecbe8d016498bd432156034700efd17816b6a6622c5f33c3a8bd38c7dd61a88','target',1,'2015-12-08 19:25:02','2015-12-08 19:25:02'),(3130,1,'cd050fad65090349cf0ee6f6105fdd3dd45d0f1ac1dcd7f6e41d8d9ec22dbc44','input',1,'2015-12-08 22:29:40','2015-12-08 22:29:40'),(3131,1,'7cc9bd091412c83452fcce68e812de78aa5af6ee59b7d36becc01fefd6df5112','input',2,'2015-12-08 22:29:40','2015-12-08 22:29:40'),(3132,1,'590f110f073f8a166e0eb2c2d3195a90ff66f54eee3c479407ccb9b8e16271b7','input',3,'2015-12-08 22:29:40','2015-12-08 22:29:40'),(3133,1,'57ea8e4f24a9abf9c11a705ab87aa1ffb87e53e91d8f85c3f979156cea23b79d','controller',5,'2015-12-08 22:29:40','2015-12-08 22:29:40'),(3134,1,'f65539ffc0279a7dca79d37cdf77c73b24a227209e6d200e2934af3e36979fd8','controller',6,'2015-12-08 22:29:40','2015-12-08 22:29:40'),(3135,1,'9c3a611d769c0695b4ea06ef6f9086518d73998337c7384aafd5d74ae3d0e8d9','controller',7,'2015-12-08 22:29:40','2015-12-08 22:29:40'),(3137,1,'b3a6de50809f65a433da523cfd0b848dd7d413cd5fc5a26c8b61ae73e21bb326','target',3,'2015-12-08 22:29:44','2015-12-08 22:29:44'),(3138,1,'1f726b341ef92c9a6ce9501833a2fb2b365d6d2bb53822729a01182669db6793','target',4,'2015-12-08 22:29:44','2015-12-08 22:29:44'),(3139,1,'0018cf5969e16ecfbda67f7dea3c1d8d9533a3f46b8a2461ae8ef84d02ca63e5','input',4,'2015-12-08 22:29:44','2015-12-08 22:29:44'),(3140,1,'cfcc42c35d435628f737534d69681156e0d579e56fcc08a5210138c200c4d2de','controller',8,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3141,1,'17cde5b1b064a070bcc7ecab8882d492ef6813723764dd9abdacbf1bdc250806','input',4,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3142,1,'eb14434cee120d3db9cbcf09475bde49c7f927bab3de87e5353451c0eb31204e','controller',8,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3143,1,'84bf5d37a6d89334658f7650d68bfe140b52bd483b90726cde8a22704c0eada7','input',4,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3144,1,'d9a839ca8d8bcf18c128964b6479041a305e22c60c5a0b4fc49ded1bce5a5c9a','controller',8,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3145,1,'bb0d1b5dedc60a5da55e6431589a277bfd05dbcd042e27884a0458530b5521f2','input',4,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3146,1,'f0de4cfec233dbcd9c204c20ffea2eacaf96e6d2e9a07bdfec87dd0f7e9b1298','controller',8,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3147,1,'54f9fdd1f9f3cba3ea9f68e5e1822b7b6634732f947cb243cd158c34294723ca','input',4,'2015-12-08 22:29:45','2015-12-08 22:29:45'),(3148,1,'f5d5d744fb956e36164ecffa8139c5a26f9584d892de6a8f9c2c01434b9a0f81','controller',8,'2015-12-08 22:29:46','2015-12-08 22:29:46'),(3149,1,'d778fc30bd73c79f9b5e73e97decbd8a6f10dd66063ccf03e66f9536ea4b14ef','input',4,'2015-12-08 22:29:46','2015-12-08 22:29:46'),(3150,1,'e5e0c8d084fae7c3aacca3c9fc5b6466317773502e383e2adc1082952206be8e','controller',8,'2015-12-08 22:29:46','2015-12-08 22:29:46'),(3151,1,'203a4de93674ce6c60b1408a0af50842669372c77b225ae5f509a275b60c320a','input',4,'2015-12-08 22:29:46','2015-12-08 22:29:46'),(3152,1,'8bf7214d888bb561e49c38f895ea141a4a7f1e72c1ab32692ebabfa5540e3448','controller',8,'2015-12-08 22:29:46','2015-12-08 22:29:46'),(3153,1,'af4e1030999a199fadcfccbaf430be6399dccfe4bb83bbd20daf26316c48e005','input',4,'2015-12-08 22:29:46','2015-12-08 22:29:46'),(3154,1,'1da85fddee39e8367e4146fce344955bc4a5cc83b2ddcc6fb77f9246426b6f77','controller',8,'2015-12-08 22:29:47','2015-12-08 22:29:47'),(3155,1,'280caa6a8c65b0c97d2c0c837f5acf898979f1ea2cdadd20ab6c9b5b4e1cc792','input',4,'2015-12-08 22:29:47','2015-12-08 22:29:47'),(3156,1,'ed4b27ac21a40b8dff068f0e612ba2a486e3a20b4f2fe893edee71d6788a5611','controller',8,'2015-12-08 22:29:47','2015-12-08 22:29:47'),(3157,1,'17c4ca50719031a045454ae42657c71f1f6097d7e75d71ede25e7ed4ac9d265c','input',4,'2015-12-08 22:29:47','2015-12-08 22:29:47'),(3158,1,'273bed1163e9e7820d9f8d4162fbb2766ee6da8e27b8cc6a405e4c3f17e56c9f','controller',8,'2015-12-08 22:29:47','2015-12-08 22:29:47');
+INSERT INTO `navigation` VALUES (2912,1,'333eb08c0b2ccb8dd7628c81d418d12f3c8a1590328a8913f207655cd362d3fd','target',2,'2015-12-08 19:25:02','2015-12-08 19:25:02'),(2913,1,'aecbe8d016498bd432156034700efd17816b6a6622c5f33c3a8bd38c7dd61a88','target',1,'2015-12-08 19:25:02','2015-12-08 19:25:02'),(3407,1,'fceab8758d8ca1699906e3360530233a59e9b9caf9201c9b437278a1fbd46ce8','input',1,'2015-12-10 23:33:25','2015-12-10 23:33:25'),(3408,1,'0b680e5f94bb673bff3fde3010b7ad848e2cbdac2e7d8f5276d5cfda7e4cf018','input',2,'2015-12-10 23:33:25','2015-12-10 23:33:25'),(3409,1,'dbde2a2f39f54308b9f81e2950285334a52d2c574767d695d98d5718dd93a013','input',3,'2015-12-10 23:33:25','2015-12-10 23:33:25'),(3410,1,'4a6157119676a3bc1764fd8a1d92aba2e0659a0bd98f1bd39eaeff0b01a40e83','controller',5,'2015-12-10 23:33:25','2015-12-10 23:33:25'),(3411,1,'378a8d2f9048b3abe1145e484d307f376d32ba259b536b26e7b5dbccef5b2bec','controller',6,'2015-12-10 23:33:25','2015-12-10 23:33:25'),(3412,1,'d7704c7947f04a276e09a04fd0c7921a644d10bdb51c8cf22901a364bcca77b4','controller',7,'2015-12-10 23:33:25','2015-12-10 23:33:25'),(3413,1,'b116d39749a866abc96168f7462c51f27dca241275650279842cef9ceedc1a2c','controller',4,'2015-12-10 23:33:25','2015-12-10 23:33:25');
 /*!40000 ALTER TABLE `navigation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,6 +261,33 @@ INSERT INTO `role_controller` VALUES (1,1,1,'2015-11-30 19:39:15','2015-11-30 19
 UNLOCK TABLES;
 
 --
+-- Table structure for table `store`
+--
+
+DROP TABLE IF EXISTS `store`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `store` (
+  `store_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `key` varchar(64) NOT NULL,
+  `value` varchar(100) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`store_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `store`
+--
+
+LOCK TABLES `store` WRITE;
+/*!40000 ALTER TABLE `store` DISABLE KEYS */;
+/*!40000 ALTER TABLE `store` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `target`
 --
 
@@ -300,7 +327,7 @@ CREATE TABLE `test` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`test_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -309,7 +336,7 @@ CREATE TABLE `test` (
 
 LOCK TABLES `test` WRITE;
 /*!40000 ALTER TABLE `test` DISABLE KEYS */;
-INSERT INTO `test` VALUES (1,5,'<p>Welcome jason, 35</p>','2015-12-08 20:06:02','2015-12-08 20:06:02'),(2,5,'<p>Welcome jason, 34</p>','2015-12-08 20:06:09','2015-12-08 20:06:09');
+INSERT INTO `test` VALUES (1,5,'<p>Welcome jason, 35</p>','2015-12-08 20:06:02','2015-12-08 20:06:02'),(2,5,'<p>Welcome jason, 34</p>','2015-12-08 20:06:09','2015-12-08 20:06:09'),(3,5,'<p>Welcome jason, 34</p>','2015-12-10 21:10:09','2015-12-10 21:10:09');
 /*!40000 ALTER TABLE `test` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +355,7 @@ CREATE TABLE `test_input` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`test_input_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,7 +364,7 @@ CREATE TABLE `test_input` (
 
 LOCK TABLES `test_input` WRITE;
 /*!40000 ALTER TABLE `test_input` DISABLE KEYS */;
-INSERT INTO `test_input` VALUES (1,1,1,'jason','2015-12-08 20:06:02','2015-12-08 20:06:02'),(2,1,2,'37','2015-12-08 20:06:02','2015-12-08 20:06:02'),(3,2,1,'jason','2015-12-08 20:06:09','2015-12-08 20:06:09'),(4,2,2,'34','2015-12-08 20:06:09','2015-12-08 20:06:09');
+INSERT INTO `test_input` VALUES (1,1,1,'jason','2015-12-08 20:06:02','2015-12-08 20:06:02'),(2,1,2,'37','2015-12-08 20:06:02','2015-12-08 20:06:02'),(3,2,1,'jason','2015-12-08 20:06:09','2015-12-08 20:06:09'),(4,2,2,'34','2015-12-08 20:06:09','2015-12-08 20:06:09'),(5,3,1,'jason','2015-12-10 21:10:09','2015-12-10 21:10:09'),(6,3,2,'34','2015-12-10 21:10:09','2015-12-10 21:10:09');
 /*!40000 ALTER TABLE `test_input` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,7 +393,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'jason','$2y$10$5giOv3zO.R6xDxVdIT71C.LnqNdv3LA3Parjb5ko.11Nb.FFe3fT2','82a53dc06cd8c94da1619ea6c6f7d5ed2b0f81550fc9b69db93ad57dc45dbed4','2015-10-14 19:34:51','2015-11-30 22:43:10'),(2,'jason2','$2y$10$TQv7lbkfVnml4zxnVKZ1yeUeyyp9TPXslHEBDBjPgD2u7B08B3KgS',NULL,'2015-11-30 21:35:59','2015-11-30 21:35:59');
+INSERT INTO `user` VALUES (1,'jason','$2y$10$5giOv3zO.R6xDxVdIT71C.LnqNdv3LA3Parjb5ko.11Nb.FFe3fT2','82a53dc06cd8c94da1619ea6c6f7d5ed2b0f81550fc9b69db93ad57dc45dbed4','2015-10-14 19:34:51','2015-12-10 23:25:03'),(2,'jason2','$2y$10$TQv7lbkfVnml4zxnVKZ1yeUeyyp9TPXslHEBDBjPgD2u7B08B3KgS',NULL,'2015-11-30 21:35:59','2015-11-30 21:35:59');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -432,4 +459,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-08 22:45:10
+-- Dump completed on 2015-12-11  0:11:16

@@ -16,6 +16,11 @@ class Form extends \Frame\View {
         if (is_null($user_id)) $user_id = 0;
         foreach ($this->inputs as $input) {
             $id = \Frame\Key::get();
+            if ($input['type'] == 'hidden') {
+                $hidden = \Frame\Key::get();
+                \Work\Models\Store::create(array('user_id' => $user_id, 'key' => $hidden, 'value' => $input['value']));
+                $input['value'] = $hidden;
+            }
             $columns[] = array($input['label'], $this->build('input', '', array('id' => $id, 'name' => $id, 'type' => $input['type'], 'value' => $input['value'])));
             if (is_null($input['input'])) continue;
             $input_id = \Work\Models\Input::where('input', '=', $input['input'])->pluck('input_id');
