@@ -44,11 +44,13 @@ $('#$key').submit(function(event) {
     $('$target [id]').each(function() {
         hidden.push($(this).attr('id'));
     });
+    console.log(hidden);
     var ids = [];
     $('body [id]').each(function() {
         if ($.inArray($(this).attr('id'), hidden) >= 0) return true;
         ids.push($(this).attr('id'));
     });
+    console.log(ids);
     $.ajax({url: '', type: 'post', dataType: 'json', data: {key: '$key', form: $(this).serializeArray(), clean: ids}}).success(function(json) {
         if (!json.status || json.status != 'COMPLETE' || !json.html) {
             var message = json.message || 'System error, check logs';
