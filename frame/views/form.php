@@ -17,9 +17,13 @@ class Form extends \Frame\View {
         foreach ($this->inputs as $input) {
             $id = \Frame\Key::get();
             if ($input['type'] == 'hidden') {
-                $hidden = \Frame\Key::get();
-                \Work\Models\Store::create(array('user_id' => $user_id, 'key' => $hidden, 'value' => $input['value']));
-                $input['value'] = $hidden;
+                if ($user_id) $store = \Work\Models\Store::where('user_id', '=', $user_id)->where('key', '=', $input['value'])->pluck('store_id');
+                else $store= \Work\Models\Store::where('key', '=', $input['value'])->pluck('store_id');
+                if (is_null($store)) {
+                    $hidden = \Frame\Key::get();
+                    \Work\Models\Store::create(array('user_id' => $user_id, 'key' => $hidden, 'value' => $input['value']));
+                    $input['value'] = $hidden;
+                }
             }
             $columns[] = array($input['label'], $this->build('input', '', array('id' => $id, 'name' => $id, 'type' => $input['type'], 'value' => $input['value'])));
             if (is_null($input['input'])) continue;
@@ -29,19 +33,25 @@ class Form extends \Frame\View {
         $layout = new \Frame\Views\Layout($columns);
         $key = \Frame\Key::get();
         $target_id = \Work\Models\Target::where('target', '=', $this->target)->pluck('target_id');
-        $target = \Work\Models\Navigation::where('user_id', '=', $user_id)
-            ->where('type', '=', 'target')
-            ->where('navigation', '=', $target_id)
-            ->orderBy('navigation_id', 'desc')
-            ->pluck('key');
-        if (is_null($target)) $target = 'body';
-        else $target = "#$target";
+        if ($target_id) {
+            $target = \Work\Models\Navigation::where('user_id', '=', $user_id)
+                ->where('type', '=', 'target')
+                ->where('navigation', '=', $target_id)
+                ->orderBy('navigation_id', 'desc')
+                ->pluck('key');
+        } else {
+            $navigation_id = \Work\Models\Navigation::where('type', '=', 'target')->where('key', '=', $this->target)->pluck('navigation_id');
+            if ($navigation_id) $target = $this->target;
+            else $target = null;
+        }
+        if (is_null($target)) $id = $target = 'body';
+        else $id = "#$target";
         $form = $this->build('form', $layout->render(), array('id' => $key));
         $js = <<<JS
 $('#$key').submit(function(event) {
     event.preventDefault();
     var hidden = [];
-    $('$target [id]').each(function() {
+    $('$id [id]').each(function() {
         hidden.push($(this).attr('id'));
     });
     console.log(hidden);
@@ -51,13 +61,13 @@ $('#$key').submit(function(event) {
         ids.push($(this).attr('id'));
     });
     console.log(ids);
-    $.ajax({url: '', type: 'post', dataType: 'json', data: {key: '$key', form: $(this).serializeArray(), clean: ids}}).success(function(json) {
+    $.ajax({url: '', type: 'post', dataType: 'json', data: {key: '$key', form: $(this).serializeArray(), target: '$target', clean: ids}}).success(function(json) {
         if (!json.status || json.status != 'COMPLETE' || !json.html) {
             var message = json.message || 'System error, check logs';
             alert(message);
             return false;
         }
-        $('$target').html(json.html);
+        $('$id').html(json.html);
     });
 });
 JS;

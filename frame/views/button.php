@@ -31,7 +31,7 @@ $('#$key').bind('click', function(event) {
     $('body [id]').each(function() {
         ids.push($(this).attr('id'));
     });
-    $.ajax({url: '', type: 'post', dataType: 'json', data: {key: '$key', clean: ids}}).success(function(json) {
+    $.ajax({url: '', type: 'post', dataType: 'json', data: {key: '$key', clean: ids, target: '$id'}}).success(function(json) {
         if (!json.status || !json.html || json.status != 'COMPLETE') {
             var message = json.message || 'System error, check logs';
             alert(message);

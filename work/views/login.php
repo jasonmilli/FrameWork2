@@ -5,10 +5,12 @@ class Login extends \Frame\View {
         $this->data = $data;
     }
     public function render() {
-        $form = new \Frame\Views\Form('\Work\Controllers\Login::check', 'middle');
+        if (isset($this->data['target'])) $target = $this->data['target'];
+        else $target = 'body';
+        $form = new \Frame\Views\Form('\Work\Controllers\Login::check', $target);
         $form->input('', 'hidden', $this->data['class'], 'class');
         $form->input('', 'hidden', $this->data['method'], 'method');
-        foreach ($this->data['data'] as $name => $value) $form->input('', 'hidden', $value, $name);
+        if (isset($this->data['data'])) foreach ($this->data['data'] as $name => $value) $form->input('', 'hidden', $value, $name);
         $form->input('Username: ', 'text', '', 'username');
         $form->input('Password: ', 'password', '', 'password');
         $form->input('', 'submit', 'Login');

@@ -1,16 +1,18 @@
 <?php namespace Work\Controllers;
 class Login extends \Frame\Controller {
-    public static function login($data) {
-        $main = new \Frame\Views\Main;
+    public static function login($data, $main = true) {
         $login = new \Work\Views\Login($data);
-        $main->layout($login);
-        return $main->render();
+        if ($main) {
+            $main = new \Frame\Views\Main;
+            $main->layout($login);
+            return $main->render();
+        } else return $login->render();
     }
     public static function check($data) {
         self::validate($data, array('username' => 'required', 'password' => 'required'));
         $controller = array('data' => array());
         foreach ($data as $key => $value) {
-            if ($key == 'class' || $key == 'method') $controller[$key] = $value;
+            if ($key == 'class' || $key == 'method' || $key == 'target') $controller[$key] = $value;
             else $controller['data'][$key] = $value;
         }
         $user = \Work\Models\User::where('username', '=', $data['username'])->first();

@@ -30,18 +30,27 @@ class Engine {
             if ($controller == '\Work\Controllers\Main::start') echo \Work\Controllers\Main::start();
             elseif ($data) echo json_encode(array('status' => 'COMPLETE', 'html' => $class::$method($data)));
             else echo json_encode(array('status' => 'COMPLETE', 'html' => $class::$method()));
-            self::cleanup($user->user_id);
+            //self::cleanup($user->user_id);
         } else {
             if (is_null($controller_id)) echo \Work\Controllers\Login::login(array('class' => '\Work\Controllers\Main', 'method' => 'start', 'data' => array()));
             else {
                 $data = self::logindata();
-                $controller = \Work\Models\Controller::where('controller_id', '=', $controller_id)->pluck('controller');
-                $controller = explode('::', $controller);
-                $controller['data'] = $data;
-                if (isset($controller['data']['username'])) echo json_encode(array('status' => 'COMPLETE', 'html'=> \Work\Controllers\Login::check($data)));
-                else echo json_encode(array('status' => 'COMPLETE', 'html' => \Work\Controllers\Login::login($controller)));
+                $data['target'] = arrayGet($_REQUEST, 'target');
+                if (isset($data['username'])) {
+                    if (!isset($data['class'])) {
+                        $data['class'] = '\Work\Controllers\Main';
+                        $data['method'] = 'start';
+                    }
+                    echo json_encode(array('status' => 'COMPLETE', 'html'=> \Work\Controllers\Login::check($data)));
+                } else {
+                    $controller = \Work\Models\Controller::where('controller_id', '=', $controller_id)->pluck('controller');
+                    $controller = explode('::', $controller);
+                    $data['class'] = $controller[0];
+                    $data['method'] = $controller[1];
+                    echo json_encode(array('status' => 'COMPLETE', 'html' => \Work\Controllers\Login::login($data, false)));
+                }
             }
-            self::cleanup();
+            //self::cleanup();
         }
     }
     private static function config() {
@@ -89,9 +98,14 @@ class Engine {
     private static function data($user_id) {
         $data = array();
         if (isset($_REQUEST['form'])) foreach ($_REQUEST['form'] as $input) {
-            $input_id = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $input['name'])->where('type', '=', 'input')->pluck('navigation');
+            if ($user_id) {
+                $input_id = \Work\Models\Navigation::where('user_id', '=', $user_id)->where('key', '=', $input['name'])->where('type', '=', 'input')->pluck('navigation');
+                $store = \Work\Models\Store::where('user_id', '=', $user_id)->where('key', '=', $input['value'])->pluck('value');
+            } else {
+                $input_id = \Work\Models\Navigation::where('key', '=', $input['name'])->where('type', '=', 'input')->pluck('navigation');
+                $store = \Work\Models\Store::where('key', '=', $input['value'])->pluck('value');
+            }
             if (is_null($input_id)) throw new \Exception("{$input['name']} not found in navigation table");
-            $store = \Work\Models\Store::where('user_id', '=', $user_id)->where('key', '=', $input['value'])->pluck('value');
             if ($store) $input['value'] = $store;
             $name = \Work\Models\Input::with('validation')->where('input_id', '=', $input_id)->first();
             if (!is_null($name->input)) $data[$name->input] = $input['value'];
@@ -108,6 +122,8 @@ class Engine {
         if (isset($_REQUEST['form'])) foreach ($_REQUEST['form'] as $input) {
             $input_id = \Work\Models\Navigation::where('key', '=', $input['name'])->where('type', '=', 'input')->pluck('navigation');
             if (is_null($input_id)) throw new \Exception("{$input['name']} not found in navigation table");
+            $store = \Work\Models\Store::where('key', '=', $input['value'])->pluck('value');
+            if ($store) $input['value'] = $store;
             $name = \Work\Models\Input::where('input_id', '=', $input_id)->first();
             if (is_null($name)) throw new \Exception("Input ID $input_id not found");
             $data[$name->input] = $input['value'];
